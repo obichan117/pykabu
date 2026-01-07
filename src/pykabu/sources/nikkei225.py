@@ -278,3 +278,67 @@ def get_indices(codes: dict[str, str] | None = None) -> list[IndexItem]:
         browser.close()
 
     return items
+
+
+# =============================================================================
+# Rank225 (Contribution Ranking)
+# =============================================================================
+
+@dataclass
+class RankItem:
+    """A Nikkei 225 contribution ranking item"""
+    name: str          # 銘柄名
+    contribution: str  # 寄与度
+    price: str         # 現在値
+    change: str        # 前日比
+
+
+def get_rank225() -> tuple[list[RankItem], list[RankItem]]:
+    """Fetch Nikkei 225 contribution ranking (requires playwright).
+
+    Returns:
+        Tuple of (top_contributors, bottom_contributors)
+    """
+    from playwright.sync_api import sync_playwright
+
+    top_items: list[RankItem] = []
+    bottom_items: list[RankItem] = []
+
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page()
+        page.goto(f"{BASE_URL}/chart/nikkei.php", wait_until="domcontentloaded")
+
+        # Wait for table to load
+        try:
+            page.wait_for_selector("#kiyo-up", timeout=5000)
+        except Exception:
+            pass
+
+        # Parse top contributors (寄与度上位)
+        top_rows = page.query_selector_all("#kiyo-up tr")
+        for row in top_rows:
+            cells = row.query_selector_all("td")
+            if len(cells) >= 4:
+                top_items.append(RankItem(
+                    name=cells[0].text_content() or "",
+                    contribution=cells[1].text_content() or "",
+                    price=cells[2].text_content() or "",
+                    change=cells[3].text_content() or "",
+                ))
+
+        # Parse bottom contributors (寄与度下位)
+        bottom_rows = page.query_selector_all("#kiyo-down tr")
+        for row in bottom_rows:
+            cells = row.query_selector_all("td")
+            if len(cells) >= 4:
+                bottom_items.append(RankItem(
+                    name=cells[0].text_content() or "",
+                    contribution=cells[1].text_content() or "",
+                    price=cells[2].text_content() or "",
+                    change=cells[3].text_content() or "",
+                ))
+
+        browser.close()
+
+    return top_items, bottom_items

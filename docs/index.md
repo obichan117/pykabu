@@ -87,6 +87,11 @@ kabu index             # Default 8 indices
 kabu index --all       # All known indices (~25)
 kabu index --custom    # Custom configured indices
 
+# Nikkei 225 contribution ranking
+kabu rank225           # Show top & bottom contributors
+kabu rank225 --top     # Top contributors only
+kabu rank225 --bottom  # Bottom contributors only
+
 # Configuration
 kabu config show                      # Show current config
 kabu config set default_importance 3  # Set default star filter
@@ -115,3 +120,4 @@ indices = nikkei225.get_indices()
 |--------|------|--------|
 | nikkei225jp.com | Economic calendar | HTTP |
 | nikkei225jp.com | Market indices | Playwright |
+| nikkei225jp.com | Nikkei 225 contribution ranking | Playwright |

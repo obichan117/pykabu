@@ -75,6 +75,41 @@ kabu index --merged
 kabu index --plain
 ```
 
+## kabu rank225
+
+Display Nikkei 225 contribution ranking (寄与度ランキング) from nikkei225jp.com.
+
+!!! note
+    This command requires Playwright. Install with: `playwright install chromium`
+
+```bash
+kabu rank225 [OPTIONS]
+```
+
+### Options
+
+| Option | Description |
+|--------|-------------|
+| `--top` | Show only top contributors (寄与度上位) |
+| `--bottom` | Show only bottom contributors (寄与度下位) |
+| `--plain` | Output plain text (no rich formatting) |
+
+### Examples
+
+```bash
+# Show both top and bottom contributors
+kabu rank225
+
+# Show only top contributors
+kabu rank225 --top
+
+# Show only bottom contributors
+kabu rank225 --bottom
+
+# Plain text output
+kabu rank225 --plain
+```
+
 ## kabu config
 
 Manage pykabu configuration. Settings are stored in `~/.config/pykabu/config.json`.
