@@ -20,11 +20,17 @@ kabu sche              # Today's schedule
 kabu sche -t           # Tomorrow's schedule
 kabu sche -w           # This week's schedule
 kabu sche -i 3         # Filter by importance (>= 3 stars)
-kabu index             # Market indices
+
+# Market indices
+kabu index             # Default 8 indices
+kabu index --all       # All known indices (~25)
+kabu index --custom    # Custom configured indices
 
 # Configuration
 kabu config show                      # Show current config
 kabu config set default_importance 3  # Set default star filter
+kabu config index list                # List available indices
+kabu config index add 212             # Add NASDAQ
 ```
 
 ### Library

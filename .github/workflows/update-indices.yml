@@ -1,0 +1,51 @@
+name: Update Index Codes
+
+on:
+  schedule:
+    # Run weekly on Sundays at 00:00 UTC
+    - cron: "0 0 * * 0"
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install -e .
+          playwright install chromium
+
+      - name: Check for index changes
+        id: check
+        run: |
+          if python scripts/scrape_indices.py --check; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+        continue-on-error: true
+
+      - name: Update indices
+        if: steps.check.outputs.changed == 'true'
+        run: python scripts/scrape_indices.py --update
+
+      - name: Create Pull Request
+        if: steps.check.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: update ALL_KNOWN_INDICES from website"
+          title: "Update index codes from nikkei225jp.com"
+          body: |
+            This PR updates `ALL_KNOWN_INDICES` in `src/pykabu/sources/nikkei225.py` based on the latest available indices from nikkei225jp.com.
+
+            This is an automated update from the weekly CI/CD workflow.
+          branch: update-indices
+          delete-branch: true

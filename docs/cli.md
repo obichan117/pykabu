@@ -51,13 +51,25 @@ kabu index [OPTIONS]
 
 | Option | Description |
 |--------|-------------|
+| `--all` | Fetch all known indices (~25) |
+| `--custom` | Fetch only custom configured indices |
+| `--merged` | Fetch default + custom indices |
 | `--plain` | Output plain text (no rich formatting) |
 
 ### Examples
 
 ```bash
-# Show market indices
+# Show default 8 indices
 kabu index
+
+# Show all known indices
+kabu index --all
+
+# Show only custom configured indices
+kabu index --custom
+
+# Show default + custom
+kabu index --merged
 
 # Plain text output
 kabu index --plain
@@ -75,6 +87,11 @@ Manage pykabu configuration. Settings are stored in `~/.config/pykabu/config.jso
 | `set KEY VALUE` | Set a configuration value |
 | `get KEY` | Get a configuration value |
 | `path` | Show config file path |
+| `index list` | List all available index codes |
+| `index add CODE` | Add a custom index |
+| `index remove CODE` | Remove a custom index |
+| `index show` | Show custom indices |
+| `index clear` | Clear all custom indices |
 
 ### Available Settings
 
@@ -96,4 +113,18 @@ kabu config get default_importance
 
 # Show config file location
 kabu config path
+
+# List all available index codes
+kabu config index list
+
+# Add custom indices
+kabu config index add 212        # Add NASDAQ
+kabu config index add 1001       # Add Bitcoin
+kabu config index add 999 --name "My Custom Index"
+
+# Show custom indices
+kabu config index show
+
+# Remove a custom index
+kabu config index remove 212
 ```

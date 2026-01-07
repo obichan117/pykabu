@@ -9,6 +9,7 @@ CONFIG_FILE = CONFIG_DIR / "config.json"
 
 DEFAULT_CONFIG = {
     "default_importance": 0,
+    "custom_indices": {},
 }
 
 
@@ -53,3 +54,35 @@ def set(key: str, value: Any) -> None:
 def get_config_path() -> Path:
     """Return the config file path."""
     return CONFIG_FILE
+
+
+# Custom indices management
+def get_custom_indices() -> dict[str, str]:
+    """Get user's custom indices configuration."""
+    return load_config().get("custom_indices", {})
+
+
+def add_custom_index(code: str, name: str) -> None:
+    """Add a custom index to the configuration."""
+    config = load_config()
+    if "custom_indices" not in config:
+        config["custom_indices"] = {}
+    config["custom_indices"][code] = name
+    save_config(config)
+
+
+def remove_custom_index(code: str) -> bool:
+    """Remove a custom index from configuration. Returns True if removed."""
+    config = load_config()
+    if "custom_indices" in config and code in config["custom_indices"]:
+        del config["custom_indices"][code]
+        save_config(config)
+        return True
+    return False
+
+
+def clear_custom_indices() -> None:
+    """Clear all custom indices."""
+    config = load_config()
+    config["custom_indices"] = {}
+    save_config(config)

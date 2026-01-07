@@ -41,7 +41,7 @@
 
 ### More Features
 - [ ] Add more data sources
-- [ ] Add more CLI commands
+- [x] Add more CLI commands (index customization)
 - [x] User config file support
 
 ### Documentation

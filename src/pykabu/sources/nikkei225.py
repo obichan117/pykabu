@@ -171,7 +171,8 @@ class IndexItem:
     percent: str
 
 
-INDEX_CODES = {
+# Default indices shown by `kabu index`
+DEFAULT_INDEX_CODES = {
     "111": "日経平均",
     "211": "NYダウ",
     "511": "ドル円",
@@ -182,10 +183,68 @@ INDEX_CODES = {
     "931": "NY金",
 }
 
+# All known indices available on nikkei225jp.com
+# Updated periodically via CI/CD (see .github/workflows/update-indices.yml)
+ALL_KNOWN_INDICES = {
+    # Japanese
+    "111": "日経平均",
+    "112": "TOPIX",
+    "121": "グロース250",
+    # US
+    "211": "NYダウ",
+    "212": "NASDAQ",
+    "213": "S&P500",
+    "214": "NASDAQ100",
+    "611": "フィラデルフィア半導体",
+    "613": "ラッセル2000",
+    # International
+    "313": "韓国KOSPI",
+    "321": "中国上海総合",
+    "331": "香港ハンセン",
+    "352": "インドNifty",
+    "411": "仏CAC40",
+    "412": "独DAX",
+    "413": "英FTSE100",
+    # Bonds/VIX
+    "151": "日本国債10年",
+    "621": "VIX恐怖指数",
+    "811": "米国債10年",
+    # Commodities
+    "921": "WTI原油",
+    "931": "NY金",
+    # Forex
+    "511": "ドル円",
+    "514": "ユーロ円",
+    "523": "ユーロドル",
+    # Crypto
+    "1001": "ビットコイン",
+    "1011": "イーサリアム",
+}
 
-def get_indices() -> list[IndexItem]:
-    """Fetch market index data from nikkei225jp.com (requires playwright)."""
+# Backward compatibility alias
+INDEX_CODES = DEFAULT_INDEX_CODES
+
+
+def get_default_indices() -> dict[str, str]:
+    """Return the default index codes."""
+    return DEFAULT_INDEX_CODES.copy()
+
+
+def get_all_known_indices() -> dict[str, str]:
+    """Return all known index codes."""
+    return ALL_KNOWN_INDICES.copy()
+
+
+def get_indices(codes: dict[str, str] | None = None) -> list[IndexItem]:
+    """Fetch market index data from nikkei225jp.com (requires playwright).
+
+    Args:
+        codes: Optional dict of code->name mappings. If None, uses DEFAULT_INDEX_CODES.
+    """
     from playwright.sync_api import sync_playwright
+
+    if codes is None:
+        codes = DEFAULT_INDEX_CODES
 
     items = []
 
@@ -202,7 +261,7 @@ def get_indices() -> list[IndexItem]:
         except Exception:
             pass
 
-        for code, name in INDEX_CODES.items():
+        for code, name in codes.items():
             try:
                 value = page.locator(f"#V{code}").text_content(timeout=500) or "-"
                 change = page.locator(f"#Z{code}").text_content(timeout=500) or "-"
