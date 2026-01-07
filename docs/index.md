@@ -92,6 +92,11 @@ kabu rank225           # Show top & bottom contributors
 kabu rank225 --top     # Top contributors only
 kabu rank225 --bottom  # Bottom contributors only
 
+# Sector ranking
+kabu rank_sec          # Show top gainers & losers
+kabu rank_sec --top    # Top gainers only
+kabu rank_sec --bottom # Top losers only
+
 # Configuration
 kabu config show                      # Show current config
 kabu config set default_importance 3  # Set default star filter
@@ -121,3 +126,4 @@ indices = nikkei225.get_indices()
 | nikkei225jp.com | Economic calendar | HTTP |
 | nikkei225jp.com | Market indices | Playwright |
 | nikkei225jp.com | Nikkei 225 contribution ranking | Playwright |
+| nikkei225jp.com | Sector ranking | Playwright |
