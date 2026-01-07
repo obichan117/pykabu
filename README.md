@@ -86,6 +86,11 @@ kabu index --all       # All known indices (~25)
 kabu index --custom    # Custom configured indices
 kabu index --merged    # Default + custom indices
 
+# Nikkei 225 contribution ranking
+kabu rank225           # Show top & bottom contributors
+kabu rank225 --top     # Top contributors only
+kabu rank225 --bottom  # Bottom contributors only
+
 # Configuration
 kabu config show                      # Show current config
 kabu config set default_importance 3  # Set default star filter
