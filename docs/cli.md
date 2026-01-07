@@ -110,7 +110,7 @@ kabu rank225 --bottom
 kabu rank225 --plain
 ```
 
-## kabu rank_sec
+## kabu rank-sec
 
 Display sector ranking (業種別株価指数ランキング) from nikkei225jp.com.
 
@@ -118,7 +118,7 @@ Display sector ranking (業種別株価指数ランキング) from nikkei225jp.c
     This command requires Playwright. Install with: `playwright install chromium`
 
 ```bash
-kabu rank_sec [OPTIONS]
+kabu rank-sec [OPTIONS]
 ```
 
 ### Options
@@ -133,16 +133,16 @@ kabu rank_sec [OPTIONS]
 
 ```bash
 # Show both top gainers and losers
-kabu rank_sec
+kabu rank-sec
 
 # Show only top gainers
-kabu rank_sec --top
+kabu rank-sec --top
 
 # Show only top losers
-kabu rank_sec --bottom
+kabu rank-sec --bottom
 
 # Plain text output
-kabu rank_sec --plain
+kabu rank-sec --plain
 ```
 
 ## kabu config
