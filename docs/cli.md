@@ -110,6 +110,41 @@ kabu rank225 --bottom
 kabu rank225 --plain
 ```
 
+## kabu rank_sec
+
+Display sector ranking (業種別株価指数ランキング) from nikkei225jp.com.
+
+!!! note
+    This command requires Playwright. Install with: `playwright install chromium`
+
+```bash
+kabu rank_sec [OPTIONS]
+```
+
+### Options
+
+| Option | Description |
+|--------|-------------|
+| `--top` | Show only top gainers (値上がり率) |
+| `--bottom` | Show only top losers (値下がり率) |
+| `--plain` | Output plain text (no rich formatting) |
+
+### Examples
+
+```bash
+# Show both top gainers and losers
+kabu rank_sec
+
+# Show only top gainers
+kabu rank_sec --top
+
+# Show only top losers
+kabu rank_sec --bottom
+
+# Plain text output
+kabu rank_sec --plain
+```
+
 ## kabu config
 
 Manage pykabu configuration. Settings are stored in `~/.config/pykabu/config.json`.

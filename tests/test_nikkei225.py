@@ -3,6 +3,7 @@
 from pykabu.sources.nikkei225 import (
     RankItem,
     ScheduleItem,
+    SectorRankItem,
     _ScheduleTableParser,
     filter_schedule_by_importance,
 )
@@ -154,3 +155,31 @@ class TestRankItem:
         )
         assert item.name == ""
         assert item.contribution == ""
+
+
+class TestSectorRankItem:
+    """Tests for SectorRankItem dataclass"""
+
+    def test_sector_rank_item_gainer(self):
+        """Test creating a gainer SectorRankItem"""
+        item = SectorRankItem(
+            name="精密機器",
+            change="▲1.90%",
+        )
+        assert item.name == "精密機器"
+        assert item.change == "▲1.90%"
+
+    def test_sector_rank_item_loser(self):
+        """Test creating a loser SectorRankItem"""
+        item = SectorRankItem(
+            name="鉱業",
+            change="▼4.42%",
+        )
+        assert item.name == "鉱業"
+        assert item.change == "▼4.42%"
+
+    def test_sector_rank_item_equality(self):
+        """Test SectorRankItem equality comparison"""
+        item1 = SectorRankItem("サービス業", "▲1.74%")
+        item2 = SectorRankItem("サービス業", "▲1.74%")
+        assert item1 == item2

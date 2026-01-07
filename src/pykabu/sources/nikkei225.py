@@ -353,3 +353,70 @@ def get_rank225() -> tuple[list[RankItem], list[RankItem]]:
         browser.close()
 
     return top_items, bottom_items
+
+
+# =============================================================================
+# Sector Ranking (業種別株価指数ランキング)
+# =============================================================================
+
+@dataclass
+class SectorRankItem:
+    """A sector ranking item"""
+    name: str      # 業種名
+    change: str    # 変動率 (e.g., "▲1.90%", "▼4.42%")
+
+
+def get_sector_rank() -> tuple[list[SectorRankItem], list[SectorRankItem]]:
+    """Fetch sector ranking (requires playwright).
+
+    Returns:
+        Tuple of (top_gainers, top_losers)
+    """
+    from playwright.sync_api import sync_playwright
+
+    gainers: list[SectorRankItem] = []
+    losers: list[SectorRankItem] = []
+
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page()
+        page.goto(f"{BASE_URL}/chart/gyoushu.php", wait_until="domcontentloaded")
+
+        # Wait for the ranking table to load (JS-rendered)
+        try:
+            page.wait_for_selector("#gyornk .tdG", timeout=5000)
+        except Exception:
+            pass
+
+        # Two nested tables inside #gyornk: left (gainers), right (losers)
+        tables = page.query_selector_all("#gyornk td.tptd > table")
+        if len(tables) >= 2:
+            # Left table: top gainers (値上がり率 TOP10)
+            gainer_rows = tables[0].query_selector_all("tr.trG")
+            for row in gainer_rows:
+                cell = row.query_selector("td.tdG")
+                if cell:
+                    per_el = cell.query_selector(".perG")
+                    name_el = cell.query_selector(".texG")
+                    if per_el and name_el:
+                        gainers.append(SectorRankItem(
+                            name=(name_el.text_content() or "").strip(),
+                            change=(per_el.text_content() or "").strip(),
+                        ))
+
+            # Right table: top losers (値下がり率 TOP10)
+            loser_rows = tables[1].query_selector_all("tr.trG")
+            for row in loser_rows:
+                cell = row.query_selector("td.tdG")
+                if cell:
+                    per_el = cell.query_selector(".perG")
+                    name_el = cell.query_selector(".texG")
+                    if per_el and name_el:
+                        losers.append(SectorRankItem(
+                            name=(name_el.text_content() or "").strip(),
+                            change=(per_el.text_content() or "").strip(),
+                        ))
+
+        browser.close()
+
+    return gainers, losers
