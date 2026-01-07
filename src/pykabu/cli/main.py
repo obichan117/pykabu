@@ -2,9 +2,9 @@
 
 import click
 
-from pykabu.cli.commands.schedule import sche
-from pykabu.cli.commands.index import index
 from pykabu.cli.commands.config import cfg
+from pykabu.cli.commands.index import index
+from pykabu.cli.commands.schedule import sche
 
 
 @click.group()
