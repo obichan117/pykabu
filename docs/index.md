@@ -2,14 +2,75 @@
 
 Python library and CLI for Japanese stock market data.
 
+## Requirements
+
+- Python 3.10+
+
 ## Installation
 
+### Quick Install (Global)
+
 ```bash
+# 1. Install pykabu
 pip install pykabu
 
-# For market indices (requires browser automation)
+# 2. Install browser for market index feature
 playwright install chromium
 ```
+
+### Recommended: Virtual Environment with uv
+
+[uv](https://docs.astral.sh/uv/) is a fast Python package manager written in Rust.
+
+**Step 1: Install uv** (one-time setup)
+
+```bash
+# macOS / Linux
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Windows (PowerShell)
+powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+
+**Step 2: Create virtual environment and install**
+
+```bash
+# Create virtual environment
+uv venv
+
+# Activate it
+source .venv/bin/activate   # macOS / Linux
+.venv\Scripts\activate      # Windows (PowerShell)
+
+# Install pykabu
+uv pip install pykabu
+
+# Install browser for market index feature
+playwright install chromium
+```
+
+### Alternative: pip + venv
+
+```bash
+# Create virtual environment
+python -m venv .venv
+
+# Activate it
+source .venv/bin/activate   # macOS / Linux
+.venv\Scripts\activate      # Windows (PowerShell)
+
+# Install pykabu
+pip install pykabu
+
+# Install browser for market index feature
+playwright install chromium
+```
+
+### Platform Notes
+
+- **macOS**: Works out of the box
+- **Windows**: Use PowerShell (not CMD)
+- **Linux**: If playwright fails, run: `playwright install-deps chromium`
 
 ## Quick Start
 
