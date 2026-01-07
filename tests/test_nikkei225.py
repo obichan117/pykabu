@@ -1,6 +1,7 @@
 """Tests for nikkei225 data source"""
 
 from pykabu.sources.nikkei225 import (
+    RankItem,
     ScheduleItem,
     _ScheduleTableParser,
     filter_schedule_by_importance,
@@ -107,3 +108,49 @@ class TestFilterByImportance:
 
         filtered = filter_schedule_by_importance(items, 5)
         assert len(filtered) == 0
+
+
+class TestRankItem:
+    """Tests for RankItem dataclass"""
+
+    def test_rank_item_creation(self):
+        """Test creating a RankItem"""
+        item = RankItem(
+            name="東京エレクトロン",
+            contribution="+82.23",
+            price="38,170",
+            change="▲2.20%",
+        )
+        assert item.name == "東京エレクトロン"
+        assert item.contribution == "+82.23"
+        assert item.price == "38,170"
+        assert item.change == "▲2.20%"
+
+    def test_rank_item_negative_contribution(self):
+        """Test RankItem with negative contribution"""
+        item = RankItem(
+            name="アドバンテスト",
+            contribution="-254.03",
+            price="20,605",
+            change="▼4.41%",
+        )
+        assert item.name == "アドバンテスト"
+        assert item.contribution == "-254.03"
+        assert item.change == "▼4.41%"
+
+    def test_rank_item_equality(self):
+        """Test RankItem equality comparison"""
+        item1 = RankItem("Test", "+10.00", "1,000", "▲1.00%")
+        item2 = RankItem("Test", "+10.00", "1,000", "▲1.00%")
+        assert item1 == item2
+
+    def test_rank_item_with_empty_values(self):
+        """Test RankItem with empty values"""
+        item = RankItem(
+            name="",
+            contribution="",
+            price="",
+            change="",
+        )
+        assert item.name == ""
+        assert item.contribution == ""

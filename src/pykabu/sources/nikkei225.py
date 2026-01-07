@@ -293,6 +293,24 @@ class RankItem:
     change: str        # 前日比
 
 
+def _extract_cell_data(cell) -> RankItem | None:
+    """Extract RankItem from a table cell."""
+    name_el = cell.query_selector(".kiyoTDsp0")
+    contrib_el = cell.query_selector(".kiyoTDsp1")
+    price_el = cell.query_selector(".kiyoTDsp2")
+    change_el = cell.query_selector(".kiyoTDsp3")
+
+    if not all([name_el, contrib_el, price_el, change_el]):
+        return None
+
+    return RankItem(
+        name=(name_el.text_content() or "").strip(),
+        contribution=(contrib_el.text_content() or "").strip(),
+        price=(price_el.text_content() or "").strip(),
+        change=(change_el.text_content() or "").strip(),
+    )
+
+
 def get_rank225() -> tuple[list[RankItem], list[RankItem]]:
     """Fetch Nikkei 225 contribution ranking (requires playwright).
 
@@ -309,35 +327,28 @@ def get_rank225() -> tuple[list[RankItem], list[RankItem]]:
         page = browser.new_page()
         page.goto(f"{BASE_URL}/chart/nikkei.php", wait_until="domcontentloaded")
 
-        # Wait for table to load
+        # Wait for the ranking table to load (JS-rendered)
         try:
-            page.wait_for_selector("#kiyo-up", timeout=5000)
+            page.wait_for_selector("#nkrnk .kiyoBdTD", timeout=5000)
         except Exception:
             pass
 
-        # Parse top contributors (寄与度上位)
-        top_rows = page.query_selector_all("#kiyo-up tr")
-        for row in top_rows:
-            cells = row.query_selector_all("td")
-            if len(cells) >= 4:
-                top_items.append(RankItem(
-                    name=cells[0].text_content() or "",
-                    contribution=cells[1].text_content() or "",
-                    price=cells[2].text_content() or "",
-                    change=cells[3].text_content() or "",
-                ))
+        # Each row has 2 cells: left (top contributor) and right (bottom contributor)
+        # Each cell contains: .kiyoTDsp0 (name), .kiyoTDsp1 (contribution),
+        #                     .kiyoTDsp2 (price), .kiyoTDsp3 (change)
+        rows = page.query_selector_all("#nkrnk tr.kiyoBdTR")
+        for row in rows:
+            cells = row.query_selector_all("td.kiyoBdTD")
+            if len(cells) >= 2:
+                # Left cell: top contributor (寄与度上位)
+                top_item = _extract_cell_data(cells[0])
+                if top_item:
+                    top_items.append(top_item)
 
-        # Parse bottom contributors (寄与度下位)
-        bottom_rows = page.query_selector_all("#kiyo-down tr")
-        for row in bottom_rows:
-            cells = row.query_selector_all("td")
-            if len(cells) >= 4:
-                bottom_items.append(RankItem(
-                    name=cells[0].text_content() or "",
-                    contribution=cells[1].text_content() or "",
-                    price=cells[2].text_content() or "",
-                    change=cells[3].text_content() or "",
-                ))
+                # Right cell: bottom contributor (寄与度下位)
+                bottom_item = _extract_cell_data(cells[1])
+                if bottom_item:
+                    bottom_items.append(bottom_item)
 
         browser.close()
 
