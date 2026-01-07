@@ -93,9 +93,9 @@ kabu rank225 --top     # Top contributors only
 kabu rank225 --bottom  # Bottom contributors only
 
 # Sector ranking
-kabu rank_sec          # Show top gainers & losers
-kabu rank_sec --top    # Top gainers only
-kabu rank_sec --bottom # Top losers only
+kabu rank-sec          # Show top gainers & losers
+kabu rank-sec --top    # Top gainers only
+kabu rank-sec --bottom # Top losers only
 
 # Configuration
 kabu config show                      # Show current config
