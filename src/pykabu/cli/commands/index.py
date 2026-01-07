@@ -25,7 +25,8 @@ def index(plain: bool, fetch_all: bool, custom: bool, merged: bool):
     elif custom:
         index_codes = config.get_custom_indices()
         if not index_codes:
-            click.echo("No custom indices configured. Use 'kabu config index add CODE' to add some.")
+            click.echo("No custom indices configured.")
+            click.echo("Use 'kabu config index add CODE' to add some.")
             click.echo("Run 'kabu config index list' to see available codes.")
             return
         title = "Custom Market Indices"

@@ -59,7 +59,8 @@ def get_config_path() -> Path:
 # Custom indices management
 def get_custom_indices() -> dict[str, str]:
     """Get user's custom indices configuration."""
-    return load_config().get("custom_indices", {})
+    indices = load_config().get("custom_indices", {})
+    return dict(indices) if indices else {}
 
 
 def add_custom_index(code: str, name: str) -> None:

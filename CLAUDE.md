@@ -12,6 +12,7 @@
 ```
 src/pykabu/
 ├── __init__.py
+├── config.py             # User configuration (~/.config/pykabu/config.json)
 ├── sources/              # Library API (for Python users)
 │   ├── __init__.py
 │   └── nikkei225.py      # from pykabu.sources import nikkei225
@@ -21,11 +22,20 @@ src/pykabu/
 │   └── commands/
 │       ├── __init__.py
 │       ├── schedule.py   # kabu sche
-│       └── index.py      # kabu index
+│       ├── index.py      # kabu index
+│       └── config.py     # kabu config
 └── utils/
     ├── __init__.py
     ├── http.py           # HTTP client
     └── output.py         # Terminal output formatting
+
+scripts/
+└── scrape_indices.py     # CI/CD script for updating index codes
+
+docs/                     # MkDocs documentation
+├── index.md
+├── cli.md
+└── api/
 ```
 
 ## Usage
@@ -50,7 +60,12 @@ kabu sche              # Today's schedule
 kabu sche -t           # Tomorrow
 kabu sche -w           # This week
 kabu sche -i 3         # Importance >= 3 stars
-kabu index             # Market indices
+kabu index             # Market indices (default 8)
+kabu index --all       # All known indices
+kabu index --custom    # Custom configured indices
+kabu config show       # Show config
+kabu config index list # List available indices
+kabu config index add 212  # Add custom index
 ```
 
 ## Data Sources
@@ -58,6 +73,32 @@ kabu index             # Market indices
 | Source | Module | HTTP/JS |
 |--------|--------|---------|
 | nikkei225jp.com | `nikkei225` | Schedule: HTTP, Index: Playwright |
+
+## Development Workflow
+
+### Git Branching
+- **NEVER commit directly to `main`** - always create a feature branch
+- Branch naming convention:
+  - `feat/<name>` - new features
+  - `fix/<name>` - bug fixes
+  - `docs/<name>` - documentation only
+  - `refactor/<name>` - code refactoring
+- Create a PR for review before merging to main
+- Use conventional commits: `feat:`, `fix:`, `docs:`, `refactor:`, `chore:`
+
+### Testing Requirements
+Before creating a PR, ensure:
+1. `pytest` - all tests pass
+2. `ruff check .` - no linting errors
+3. `mypy src/` - no type errors
+4. Add tests for new features/bug fixes
+
+### Documentation Maintenance
+Keep these files updated as you develop:
+- **`tasks.md`** - Update task status (in progress/completed)
+- **`docs/`** - Update when adding/changing CLI commands
+- **`README.md`** - Update for user-facing changes
+- **`CLAUDE.md`** - Update architecture diagram if structure changes
 
 ## Adding a New Data Source
 
@@ -82,10 +123,27 @@ kabu index             # Market indices
 - Keep library (`sources/`) and CLI (`cli/`) separate
 
 ## Development
+
+### Setup
 ```bash
 pip install -e ".[dev]"
 playwright install chromium
-ruff check .
-mypy src/
-pytest
 ```
+
+### Before Committing
+```bash
+ruff check .           # Lint
+mypy src/              # Type check
+pytest                 # Run tests
+```
+
+### Full Feature Workflow
+1. Create branch: `git checkout -b feat/my-feature`
+2. Make changes
+3. Update `tasks.md` (mark task in progress)
+4. Run tests: `pytest && ruff check . && mypy src/`
+5. Update docs if needed (`README.md`, `docs/`)
+6. Commit: `git commit -m "feat: add my feature"`
+7. Push: `git push -u origin feat/my-feature`
+8. Create PR on GitHub
+9. After merge, update `tasks.md` (mark completed)

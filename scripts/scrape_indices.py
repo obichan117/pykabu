@@ -105,7 +105,7 @@ def main():
 
     parser = argparse.ArgumentParser(description="Scrape available index codes")
     parser.add_argument("--update", action="store_true", help="Update source file")
-    parser.add_argument("--check", action="store_true", help="Check for changes (exit 1 if changed)")
+    parser.add_argument("--check", action="store_true", help="Check for changes")
     args = parser.parse_args()
 
     print("Scraping available indices from nikkei225jp.com...")
