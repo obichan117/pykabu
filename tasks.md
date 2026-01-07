@@ -42,7 +42,7 @@
 ### More Features
 - [ ] Add more data sources
 - [ ] Add more CLI commands
-- [ ] User config file support
+- [x] User config file support
 
 ### Documentation
 - [x] Update README.md with usage examples

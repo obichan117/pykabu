@@ -2,6 +2,7 @@
 
 import click
 
+from pykabu import config
 from pykabu.sources import nikkei225
 from pykabu.utils.output import TableData, print_table
 
@@ -9,10 +10,14 @@ from pykabu.utils.output import TableData, print_table
 @click.command()
 @click.option("-t", "--tomorrow", is_flag=True, help="Show tomorrow's schedule")
 @click.option("-w", "--week", is_flag=True, help="Show this week's schedule")
-@click.option("-i", "--importance", type=int, default=0, help="Minimum importance (1-5 stars)")
+@click.option("-i", "--importance", type=int, default=None, help="Minimum importance (1-5 stars)")
 @click.option("--plain", is_flag=True, help="Output plain text instead of rich table")
-def sche(tomorrow: bool, week: bool, importance: int, plain: bool):
+def sche(tomorrow: bool, week: bool, importance: int | None, plain: bool):
     """Show economic schedule from nikkei225jp.com"""
+    # Use config default if not specified
+    if importance is None:
+        importance = config.get("default_importance", 0)
+
     if week:
         items = nikkei225.get_week_schedule()
         title = "This Week's Economic Schedule"

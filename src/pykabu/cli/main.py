@@ -4,6 +4,7 @@ import click
 
 from pykabu.cli.commands.schedule import sche
 from pykabu.cli.commands.index import index
+from pykabu.cli.commands.config import cfg
 
 
 @click.group()
@@ -15,6 +16,7 @@ def cli():
 
 cli.add_command(sche)
 cli.add_command(index)
+cli.add_command(cfg, name="config")
 
 
 if __name__ == "__main__":

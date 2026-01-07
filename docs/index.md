@@ -21,6 +21,10 @@ kabu sche -t           # Tomorrow's schedule
 kabu sche -w           # This week's schedule
 kabu sche -i 3         # Filter by importance (>= 3 stars)
 kabu index             # Market indices
+
+# Configuration
+kabu config show                      # Show current config
+kabu config set default_importance 3  # Set default star filter
 ```
 
 ### Library

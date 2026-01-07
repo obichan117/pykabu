@@ -62,3 +62,38 @@ kabu index
 # Plain text output
 kabu index --plain
 ```
+
+## kabu config
+
+Manage pykabu configuration. Settings are stored in `~/.config/pykabu/config.json`.
+
+### Subcommands
+
+| Command | Description |
+|---------|-------------|
+| `show` | Show current configuration |
+| `set KEY VALUE` | Set a configuration value |
+| `get KEY` | Get a configuration value |
+| `path` | Show config file path |
+
+### Available Settings
+
+| Key | Default | Description |
+|-----|---------|-------------|
+| `default_importance` | `0` | Default star filter for schedule commands (0 = no filter) |
+
+### Examples
+
+```bash
+# Show current configuration
+kabu config show
+
+# Set default importance filter to 3 stars
+kabu config set default_importance 3
+
+# Get a specific value
+kabu config get default_importance
+
+# Show config file location
+kabu config path
+```
