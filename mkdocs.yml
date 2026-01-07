@@ -1,0 +1,46 @@
+site_name: pykabu
+site_url: https://obichan117.github.io/pykabu
+site_description: Python library and CLI for Japanese stock market data
+repo_url: https://github.com/obichan117/pykabu
+repo_name: obichan117/pykabu
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.sections
+    - content.code.copy
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            show_source: true
+            show_root_heading: true
+
+nav:
+  - Home: index.md
+  - CLI: cli.md
+  - API Reference:
+      - nikkei225: api/nikkei225.md
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - admonition
+  - tables

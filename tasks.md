@@ -35,9 +35,9 @@
 - [x] Basic tests for schedule scraper
 - [x] GitHub Actions CI workflow
 - [x] GitHub Actions publish workflow
-- [ ] Initialize git repo *(run `git init` manually)*
-- [ ] Create GitHub repo
-- [ ] Set up PyPI trusted publishing
+- [x] Initialize git repo
+- [x] Create GitHub repo
+- [x] Set up PyPI trusted publishing *(configure at pypi.org/manage/account/publishing/)*
 
 ### More Features
 - [ ] Add more data sources
@@ -45,8 +45,8 @@
 - [ ] User config file support
 
 ### Documentation
-- [ ] Update README.md with usage examples
-- [ ] API documentation (mkdocs)
+- [x] Update README.md with usage examples
+- [x] API documentation (mkdocs)
 
 ---
 
